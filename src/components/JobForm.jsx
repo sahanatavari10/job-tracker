@@ -1,5 +1,37 @@
 import React, { useState } from "react";
 
+const formStyle = {
+  display: "flex",
+  flexDirection: "column",
+  gap: "0.75rem",
+  marginBottom: "2rem",
+  border: "1px solid #ddd",
+  borderRadius: "8px",
+  padding: "1rem",
+  backgroundColor: "#f1f1f1",
+};
+
+const inputStyle = {
+  padding: "0.5rem",
+  fontSize: "1rem",
+  borderRadius: "4px",
+  border: "1px solid #ccc",
+};
+
+const selectStyle = {
+  ...inputStyle,
+};
+
+const buttonStyle = {
+  padding: "0.6rem",
+  fontSize: "1rem",
+  backgroundColor: "#007bff",
+  color: "#fff",
+  border: "none",
+  borderRadius: "4px",
+  cursor: "pointer",
+};
+
 const JobForm = ({ onAddJob }) => {
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
@@ -7,80 +39,47 @@ const JobForm = ({ onAddJob }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (!company || !role) return;
 
-    const newJob = {
-      id: Date.now(),
-      company,
-      role,
-      status,
-    };
+    onAddJob({ company, role, status });
 
-    onAddJob(newJob);
+    // Reset form fields
     setCompany("");
     setRole("");
     setStatus("Applied");
   };
 
   return (
-    <form onSumbit={handleSubmit} style={formStyle}>
+    <form style={formStyle} onSubmit={handleSubmit}>
       <input
+        style={inputStyle}
         type="text"
-        placeHolder="Company"
+        placeholder="Company"
         value={company}
         onChange={(e) => setCompany(e.target.value)}
-        style={inputStyle}
-      ></input>
+      />
       <input
+        style={inputStyle}
         type="text"
-        placeHolder="Role"
+        placeholder="Role"
         value={role}
         onChange={(e) => setRole(e.target.value)}
-        style={inputStyle}
-      ></input>
+      />
       <select
+        style={selectStyle}
         value={status}
         onChange={(e) => setStatus(e.target.value)}
-        style={selectStyle}
       >
-        <option>Applied</option>
-        <option>Interview</option>
-        <option>Offer</option>
-        <option>Rejected</option>
+        <option value="Applied">Applied</option>
+        <option value="Interviewing">Interviewing</option>
+        <option value="Offer">Offer</option>
+        <option value="Rejected">Rejected</option>
       </select>
-      <button type="submit" style={buttonStyle}>Add Job</button>
+      <button type="submit" style={buttonStyle}>
+        Add Job
+      </button>
     </form>
   );
 };
 
 export default JobForm;
-
-const formStyle = {
-  display: "flex",
-  flexDirection: "column",
-  gap: "10px",
-  marginBottom: "20px",
-  width: "300px",
-};
-
-const inputStyle = {
-  padding: "8px",
-  fontSize: "1rem",
-};
-
-const buttonStyle = {
-  padding: "10px",
-  backgroundColor: "#007bff",
-  color: "white",
-  border: "none",
-  cursor: "pointer",
-};
-
-const selectStyle = {
-  padding: "10px",
-  borderRadius: "4px",
-  border: "1px solid #ccc",
-  marginBottom: "10px",
-  width: "100%",
-};

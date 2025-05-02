@@ -3,13 +3,16 @@ import React from "react";
 const JobCard = (job, onDelete) => {
   return (
     <div style={cardStyle}>
-      <h3 style={titleStyle}>
-        {job.role} at {job.company}
+      <h3>
+        {job.role} @ {job.company}
       </h3>
       <p>
         Status: <strong>{job.status}</strong>
       </p>
-      <button onClick={onDelete} className="btn btn-danger">
+      <button
+        onClick={onDelete}
+        style={buttonStyle}
+      >
         Delete
       </button>
     </div>
@@ -26,6 +29,10 @@ const cardStyle = {
   backgroundColor: "#f9f9f9",
 };
 
-const titleStyle = {
-  margin: "0 0 5px 0",
+const buttonStyle = {
+  background: "red",
+  color: "white",
+  padding: "6px 12px",
+  border: "none",
+  borderRadius: "4px",
 };
