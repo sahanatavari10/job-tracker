@@ -1,28 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import JobForm from "./components/JobForm";
 import JobList from "./components/JobList";
+import StatusFilter from "./components/StatusFilter";
 
 function App() {
   const [jobs, setJobs] = useState([]);
+  const [statusFilter, setStatusFilter] = useState("");
 
-  useEffect(() => {
-    const storedJobs = JSON.parse(localStorage.getItem("jobs"));
-    if (storedJobs) setJobs(storedJobs);
-  }, []);
+  const addJob = (newJob) => {
+    setJobs([...jobs, newJob]);
+  };
 
-  useEffect(() => {
-    localStorage.setItem("jobs", JSON.stringify(jobs));
-  }, [jobs]);
+  const filteredJobs = statusFilter
+    ? jobs.filter((job) => job.status === statusFilter)
+    : jobs;
 
-  const handleAddJobs = (job) => {
-    setJobs((prevJobs) => [...prevJobs, job]);
+  const uniqueStatuses = [...new Set(jobs.map((job) => job.status))];
+
+  const deleteJob = (indexToRemove) => {
+    const updated = jobs.filter((_, index) => index !== indexToRemove);
+    setJobs(updated);
   };
 
   return (
     <div style={containerStyle}>
       <h1 style={headerStyle}>Job Tracker</h1>
-      <JobForm onAddJob={handleAddJobs}></JobForm>
-      <JobList jobs={jobs}></JobList>
+      <JobForm onAddJob={addJob} />
+      <StatusFilter
+        statuses={uniqueStatuses}
+        selectedStatus={statusFilter}
+        onChange={setStatusFilter}
+      />
+      <JobList jobs={filteredJobs} onDelete={deleteJob} />
     </div>
   );
 }
@@ -30,10 +39,9 @@ function App() {
 export default App;
 
 const containerStyle = {
+  padding: "2rem",
   maxWidth: "600px",
-  margin: "auto",
-  padding: "20px",
-  fontFamily: "Arial, sans-serif",
+  margin: "auto"
 };
 
 const headerStyle = {

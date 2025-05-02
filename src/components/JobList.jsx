@@ -1,15 +1,12 @@
 import React from "react";
 import JobCard from "./JobCard";
 
-const JobList = (jobs) => {
+const JobList = ({ jobs, onDelete }) => {
   if (!Array.isArray(jobs)) return <p>No jobs to display.</p>;
-  if (jobs.length === 0) {
-    return <p>No job applications yet. Add some!</p>;
-  }
   return (
     <div style={listStyle}>
-      {jobs.map((job) => (
-        <JobCard key={job.id} job={job} />
+      {jobs.map((job, index) => (
+        <JobCard key={index} job={job} onDelete={() => onDelete(index)} />
       ))}
     </div>
   );
